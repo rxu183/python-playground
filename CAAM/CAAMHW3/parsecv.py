@@ -8,6 +8,11 @@ def distance(tuple1, tuple2):
     return math.sqrt(pow(deltax, 2) + pow(deltay, 2))
 
 def k_means(df, guesses, threshold): 
+    """
+    df = dataframe ? something read in from data
+    guesses = ranges ?
+    threshold  = very samll number.
+    """
     change = 1
     temp = 0
     
@@ -53,34 +58,39 @@ def k_means(df, guesses, threshold):
             break
     return guesses
 
-df = pd.read_csv('CAAM/CAAMHW3/raw_uber_data.csv', usecols=['Lat','Lon'])
-df1 = pd.read_csv('CAAM/CAAMHW3/raw_uber_data_weekday_afternoons.csv', usecols=['Lat','Lon'])
-df2 = pd.read_csv('CAAM/CAAMHW3/raw_uber_data_weekday_evenings.csv', usecols=['Lat','Lon'])
-df3 = pd.read_csv('CAAM/CAAMHW3/raw_uber_data_weekday_mornings.csv', usecols=['Lat','Lon'])
-guesses = [[40.77, -73.9], [40.78, -73.88], [40.81, -73.94], [40.8, -74], [40.9, -74], [40.9, -73.87]]
-guesses1 = [[40.77, -73.9], [40.78, -73.88], [40.81, -73.94], [40.8, -74], [40.9, -74], [40.9, -73.87]]
-guesses2 = [[40.77, -73.9], [40.78, -73.88], [40.81, -73.94], [40.8, -74], [40.9, -74], [40.9, -73.87]]
-guesses3 = [[40.77, -73.9], [40.78, -73.88], [40.81, -73.94], [40.8, -74], [40.9, -74], [40.9, -73.87]]
-ansk = k_means(df, guesses, 0.1)
-ans1 = k_means(df1, guesses1, 0.1)
-ans2 = k_means(df2, guesses2, 0.1)
-ans3 = k_means(df3, guesses3, 0.1)
 
-temp = [ansk, ans1, ans2, ans3]
-descriptor = 0
-for ans in temp:
-    if descriptor == 0:
-        print("The initial dataset:")
-    elif descriptor == 1:
-        print("Weekday Mornings:")
-    elif descriptor == 2:
-        print("Weekday Afternoons:")
-    else:
-        print("Weekday Evenings: ")
-    ind = 0
-    descriptor += 1
-    for res in ans:
-        ind += 1
-        print("The ", ind , "th optimal location is: ", res)
-    print("")
-#print(df)
+def main():
+
+    df = pd.read_csv('CAAM/CAAMHW3/raw_uber_data.csv', usecols=['Lat','Lon'])
+    df1 = pd.read_csv('CAAM/CAAMHW3/raw_uber_data_weekday_afternoons.csv', usecols=['Lat','Lon'])
+    df2 = pd.read_csv('CAAM/CAAMHW3/raw_uber_data_weekday_evenings.csv', usecols=['Lat','Lon'])
+    df3 = pd.read_csv('CAAM/CAAMHW3/raw_uber_data_weekday_mornings.csv', usecols=['Lat','Lon'])
+    guesses = [[40.77, -73.9], [40.78, -73.88], [40.81, -73.94], [40.8, -74], [40.9, -74], [40.9, -73.87]]
+    guesses1 = [[40.77, -73.9], [40.78, -73.88], [40.81, -73.94], [40.8, -74], [40.9, -74], [40.9, -73.87]]
+    guesses2 = [[40.77, -73.9], [40.78, -73.88], [40.81, -73.94], [40.8, -74], [40.9, -74], [40.9, -73.87]]
+    guesses3 = [[40.77, -73.9], [40.78, -73.88], [40.81, -73.94], [40.8, -74], [40.9, -74], [40.9, -73.87]]
+    ansk = k_means(df, guesses, 0.1)
+    ans1 = k_means(df1, guesses1, 0.1)
+    ans2 = k_means(df2, guesses2, 0.1)
+    ans3 = k_means(df3, guesses3, 0.1)
+
+    temp = [ansk, ans1, ans2, ans3]
+    descriptor = 0
+    for ans in temp:
+        if descriptor == 0:
+            print("The initial dataset:")
+        elif descriptor == 1:
+            print("Weekday Mornings:")
+        elif descriptor == 2:
+            print("Weekday Afternoons:")
+        else:
+            print("Weekday Evenings: ")
+        ind = 0
+        descriptor += 1
+        for res in ans:
+            ind += 1
+            print("The ", ind , "th optimal location is: ", res)
+        print("")
+    #print(df)
+
+main()
