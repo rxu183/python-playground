@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
+    <py-config>
+        plugins = [
+            "https://pyscript.net/latest/plugins/python/py_tutor.py"
+        ]
+        packages = [
+                        "matplotlib"
+                    ]
+    </py-config>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -63,6 +70,7 @@
         margin-bottom: 0;
       }
     </style>
+
   </head>
 
   <body>
@@ -79,6 +87,7 @@
                 <v-btn href="#works" text="text" class="primary--text">/Recent Works</v-btn>
                 <v-btn href="#hobbies" text="text" class="primary--text">/Hobbies</v-btn>
                 <v-btn href="#contact" text="text" class="primary--text" outlined="outlined">/Contacts</v-btn>
+                <v-btn href="#projects" text="text" class="primary--text" outlined="outlined">/Projects</v-btn>
               </nav>
             </v-col>
           </v-row>
@@ -101,6 +110,19 @@
                   <small class="primary--text">~/.skills</small>
                 </v-footer>
               </v-card>
+            </v-col>
+          </section>
+          <section class="row mb-5" id="projects">
+            <v-col cols="12" md="6">
+              <h1 class="primary--text" data-aos="fade-up">/Linear Regression Project</h1>
+            </v-col>
+            <v-card-text>
+                <py-script>
+                    from datetime import datetime
+                    now = datetime.now()
+                    display(now.strftime("%m/%d/%Y, %H:%M:%S"))
+                </py-script>
+              </v-card-text>
             </v-col>
           </section>
           <section class="row mb-5" id="works">
@@ -171,11 +193,12 @@
         </footer>
       </v-app>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="config.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
     <script>
       var vm = new Vue({
         el: '#app',

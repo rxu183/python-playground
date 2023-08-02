@@ -1,55 +1,63 @@
 window.PorfolioConfig = {
-  name: 'John Doe',
+  name: 'Richard Xu',
   jobTitle: 'Full-stack Web Developer',
-  jobDescription: 'Sit quis in tempor quis. Nisi ex exercitation in irure. Reprehenderit sint aliqua et dolore enim laboris dolore exercitation magna aliqua ex ad.',
+  jobDescription: 'Looking for a job',
   skills: [
     {
       name: 'JavaScript',
-      description: 'Reprehenderit mollit id ad veniam.'
+      description: '1 year of experience'
     },
     {
-      name: 'HTML',
-      description: 'Fugiat veniam esse consequat quis cillum elit consequat Lorem pariatur ipsum veniam irure incididunt non.'
+      name: 'HTML', 
+      description: '.'
     },
     {
       name: 'CSS',
-      description: 'Elit tempor mollit consectetur laborum nostrud qui in.'
+      description: 'But '
+    },
+    {
+        name: 'Tensorflow',
+        description: 'Implemented several algorithms in Tensorflow'
+    },
+    {
+        name: 'Pro Leetcoder',
+        description: '300 + problems solved'
     }
   ],
   works: [
     {
-      name: 'Vue Stripe Checkout',
+      name: 'Machine Learning PDF',
       link: 'https://jofftiquez.github.io/vue-stripe-checkout',
-      description: 'Mollit dolor tempor adipisicing non pariatur in tempor cillum do. In officia ullamco laborum ullamco voluptate. Laboris sunt quis enim Lorem laboris aliquip duis non magna excepteur voluptate. Pariatur velit aliquip officia nulla anim reprehenderit deserunt. Sint nostrud ipsum do aliquip.'
+      description: 'A lengthy LaTeX I have written about machine learning and data science. Denotes the statistical techniques I\'ve learned, and contains my comments on how I understood them.'
     },
     {
-      name: 'ToDo App',
+      name: 'Linear Regression on Ocean Salinity and Temperature',
       link: 'https://theuselessweb.com/',
-      description: 'Esse magna anim incididunt enim sint aute consectetur ipsum id nostrud eu do. Pariatur et anim enim aliquip anim. Laboris labore incididunt labore enim nisi elit excepteur deserunt irure exercitation exercitation. Lorem sit ad laborum sit velit veniam sit nisi nostrud occaecat duis nulla duis.'
+      description: 'Self-developed model for linear regression.'
     },
     {
-      name: 'A Mobile Game',
-      link: 'https://theuselessweb.com/',
+      name: 'Rice Datathon 2023, Rice Hackathon 2022',
+      link: 'https://devpost.com/rgx1?ref_content=user-portfolio&ref_feature=portfolio&ref_medium=global-nav',
       description: 'Incididunt non cupidatat deserunt ut commodo qui non do Lorem. Qui aute minim enim sit magna est consectetur incididunt. Ex est cupidatat tempor pariatur deserunt labore tempor minim laboris magna ipsum minim ea ea. Consectetur do anim laboris nulla nisi veniam sint qui.'
     }
   ],
   hobbies: [
     {
-      name: 'Rock Climbing',
-      description: 'Occaecat ipsum dolor ea ad ut irure do proident excepteur consectetur duis eu culpa velit.'
+      name: 'Competitive Programming',
+      description: 'USACO Silver Division, LeetCode 2000+'
     },
     {
-      name: 'Surfing',
-      description: 'Laboris occaecat adipisicing culpa duis aute ea excepteur quis eiusmod mollit est pariatur.'
+      name: 'Chess',
+      description: '1400 rating to help my logic skills'
     },
     {
-      name: 'Rubick\'s Cube',
-      description: 'Laborum pariatur sint labore officia enim occaecat id.'
+      name: 'Hackathons and Datathons!',
+      description: 'See project section above for results!'
     }
   ],
   contacts: {
-    email: 'john.doe@gmail.com',
-    mobileNo: '+639171234567',
+    email: 'rgx1@rice.edu',
+    mobileNo: '+1 832 661 7160',
     phoneNo: '+12 345 6789',
     links: [
       {
