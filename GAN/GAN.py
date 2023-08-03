@@ -164,7 +164,6 @@ def test(model_generator):
 
 #7. Create the main function with visualization
 def main():
-    gen_test = generator()
     data = img_dataset(os.path.join('.', 'dataset', 'actual'))
 
 #8. Run the main function!
