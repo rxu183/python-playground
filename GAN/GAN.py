@@ -1,9 +1,10 @@
 #Ok, so this will be a real GAN, coded by me.
-
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import torch
+import cv2
+import os
 from torch.utils.tensorboard import SummaryWriter
 
 #Hyperparameters
@@ -12,8 +13,32 @@ EPOCHS = 10
 NUMBER_TO_GENERATE = 3
 k = 1 #Number of times to train the discriminator before training the generator.
 
-#0. Create the latent vector - is this really the first step?
+
 writer = SummaryWriter() #Defines tensorboard writer.
+
+#0. Create the Data Reading Class
+class img_datset(torch.utils.data.Dataset):
+    #OUr dataset requires three elements:
+    def __init__(self, dataset_location, has_classes=False, has_annotations=False):
+        self.has_classes = has_classes #I'm saving this in case I want ot turn this into a classifier at some point
+        self.annotations = has_annotations #Similar reason to above. Currently, I just need images.
+        self.data_loc = dataset_location #This is the actual data.
+        self.classes = None
+        if has_classes:
+            self.classes = os.listdir(dataset_location) #List of classes in our dataset
+            self.data = []
+            for category in self.classes:
+                self.data.append(os.listdir(os.path.join(dataset_location, category))) #List of files in each class
+        else:
+            self.data = os.listdir(dataset_location) #We're working with data directly
+    def __len__(self):
+        return len(self.data)
+    def __getitem__(self, index):
+        #At least for our GAN:
+        image_loc = os.path.join(self.data_loc, self.data[index])
+        image = cv2.imread(image_loc)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        return image
 #1. Create the generator model
 class generator(torch.nn.Module):
     def __init__(self):
@@ -134,11 +159,13 @@ def test(model_generator):
         plt.imshow(fakes[index])
         plt.show()
 
-#6.5 Create the input function
-def read_data():
-    
+
+        #Possibly if we need annotation support or something we can add more later:
+
 #7. Create the main function with visualization
 def main():
+    gen_test = generator()
+    data = img_dataset(os.path.join('.', 'dataset', 'actual'))
 
 #8. Run the main function!
 main()
