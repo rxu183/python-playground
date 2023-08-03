@@ -11,12 +11,13 @@ from torch.utils.tensorboard import SummaryWriter
 BATCH_SIZE = 3
 EPOCHS = 10
 NUMBER_TO_GENERATE = 3
+PATH = os.path.join('.', 'dataset', 'actual')
 k = 1 #Number of times to train the discriminator before training the generator.
 
 
 writer = SummaryWriter() #Defines tensorboard writer.
 
-#0. Create the Data Reading Class
+#0. Create the Dataset sublcass
 class img_datset(torch.utils.data.Dataset):
     #OUr dataset requires three elements:
     def __init__(self, dataset_location, has_classes=False, has_annotations=False):
@@ -162,9 +163,13 @@ def test(model_generator):
 
         #Possibly if we need annotation support or something we can add more later:
 
-#7. Create the main function with visualization
+#7. Create the main function
 def main():
-    data = img_dataset(os.path.join('.', 'dataset', 'actual'))
+    data = img_datset(PATH) #PATH
+    reals = torch.utils.data.DataLoader(data, batch_size=BATCH_SIZE, shuffle=True)
+    train(reals, model_discriminator, model_generator, generator_loss, discriminator_loss, discriminator_optimizer, generator_optimizer)
+    test(model_generator)
+
 
 #8. Run the main function!
 main()
