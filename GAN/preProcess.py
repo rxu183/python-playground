@@ -1,10 +1,10 @@
 import tensorflow as tf
 #import tensorflow_datasets as tfds
-import numpy as np
+#import numpy as np
 import matplotlib.pyplot as plt
 import os
 import cv2
-import matplotlib.image as mpimg
+#import matplotlib.image as mpimg
 
 
 #These are the target final size of all of the input images
@@ -70,7 +70,7 @@ def create_dataset(img_folder):
 
     Desired Parameters:
         Resolution (e.g. 256 x 256)
-        Classes Information would be included with the folder titles.
+        Classes Information would be included with the folder title - did not include.
        
         The above two are the most important parameters - Good, because I've already included that above.
         Should we always include all steps, or should we have booleans regarding the exact "jitters" we
@@ -86,8 +86,16 @@ def create_dataset(img_folder):
         uniqueIdentifier = 0
         if(class_dir[-1] == 'S'): #'S' FOR SKIP
            continue
+        if(class_dir == '.DS_Store'): #Skip automatically created mac files
+           continue
         for file in os.listdir(os.path.join(img_folder, class_dir)):
             image_path = os.path.join(img_folder, class_dir, file)
+            if image_path[-2] == '.': #Rename bad files
+                print("REMOVED BAD FILE: " + image_path)
+                os.rename(image_path, image_path[:-2])
+                image_path = image_path[:-2]
+            elif image_path[-1] != 'g': #If it's not a png/jpeg/jpg file, then we skip it
+                continue
             #image = np.array(Image.open(image_path))
             #image = cv2.resize(image, (IMG_HEIGHT, IMG_WIDTH, 3))
             #print(image_path)
@@ -116,7 +124,6 @@ def create_dataset(img_folder):
             #Write to file:
             #cv2.imwrite(write_path, image)
             image = tf.io.encode_jpeg(image)
-
             tf.io.write_file(write_path, image)
             uniqueIdentifier +=1
             #img_data_array.append(image)

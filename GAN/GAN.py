@@ -11,7 +11,7 @@ from torch.utils.tensorboard import SummaryWriter
 BATCH_SIZE = 3
 EPOCHS = 10
 NUMBER_TO_GENERATE = 3
-PATH = os.path.join('.', 'dataset', 'actual')
+PATH = os.path.join('.', 'formatted_dataset', 'class_yoyy')
 k = 1 #Number of times to train the discriminator before training the generator.
 
 
@@ -45,18 +45,21 @@ class generator(torch.nn.Module):
     def __init__(self):
         #Ok, so the way this works is um we just throw more nodes at our model. 
         super().__init__()
-        self.input = torch.nn.Linear(100, 16 * 16 * 64) #Create 64 16x16 panels that are the result of something.
-        self.activation1 = torch.nn.LeakyReLU()
-        self.conv1 = torch.nn.ConvTranspose2d(64, 32, 3, stride=2, padding="same") #oh good heavens this is complicated ot iamgine. Padding refers to the padding necessary to generat this output.
+        self.input = torch.nn.Linear(100, 16 * 16 * 64) #Create 64 16x16 pixels that are the result of something.
+        #self.activation1 = torch.nn.LeakyReLU()
+        #self.reshape_latent = 
+        self.conv1 = torch.nn.ConvTranspose2d(in_channels=64, out_channels=32, kernel_size=3, stride=2) #oh good heavens this is complicated ot iamgine. Padding refers to the padding necessary to generat this output.
         self.activation2 = torch.nn.LeakyReLU()
-        self.conv2 = torch.nn.ConvTranspose2d(32, 16, 3, stride=2, padding="same")
+        self.conv2 = torch.nn.ConvTranspose2d(in_channels=32, out_channels=16, kernel_size=3, stride=2)
         self.activation3 = torch.nn.LeakyReLU()
-        self.conv3 = torch.nn.ConvTranspose2d(16, 3, 3, stride=2, padding="same")
+        self.conv3 = torch.nn.ConvTranspose2d(in_channels=16, out_channels=16, kernel_size=3, stride=2)
         self.activation4 = torch.nn.LeakyReLU()
-        self.output = torch.nn.ConvTranspose2d(16, 3, 3, stride=2, padding="same")
+        self.output = torch.nn.ConvTranspose2d(in_channels=16, out_channels=3, kernel_size=3, stride=2)
     def forward(self, input): #I CAN INPUT A BATCH OF NOISE VECTORS
         x = self.input(input)
-        x = self.activation1(x)
+        #x = self.activation1(x)
+        x = torch.reshape(x, (BATCH_SIZE, 64, 16, 16)) #This should reshape the input 
+        #x = self.reshape_latent(x)
         x = self.conv1(x)
         x = self.activation2(x)
         x = self.conv2(x)
@@ -72,15 +75,15 @@ model_generator = generator()
 class discriminator(torch.nn.Module):
     def __init__(self):
         super().__init__()
-        self.input = torch.nn.Conv2d(3, 16, 3, stride=2, padding="same") #3 input channels, 16 output channels, 3x3 kernel, stride 2, padding same
+        self.input = torch.nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=2) #3 input channels, 16 output channels, 3x3 kernel, stride 2, padding same
         self.activation1 = torch.nn.LeakyReLU()
-        self.conv1 = torch.nn.Conv2d(16, 32, 3, stride=2, padding="same")
+        self.conv1 = torch.nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=2)
         self.activation2 = torch.nn.LeakyReLU()
-        self.conv2 = torch.nn.Conv2d(32, 64, 3, stride=2, padding="same")
+        self.conv2 = torch.nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=2)
         self.activation3 = torch.nn.LeakyReLU()
         self.flatten = torch.nn.Flatten() #Ok, nice this flattens it for us without 
-        self.output = torch.nn.Linear(BATCH_SIZE, 1, bias=True) #Output dimension.
-        self.activationOut = torch.nn.sigmoid()
+        #self.output = torch.nn.Linear(BATCH_SIZE, 1, bias=True) #Output dimension.
+        self.activationOut = torch.nn.Sigmoid()
         #I should have roughly 2916 trainable pamaeters.
     
     def forward(self, fake, real):
@@ -91,7 +94,7 @@ class discriminator(torch.nn.Module):
         x = self.conv2(x)
         x = self.activation3(x)
         x = self.flatten(x)
-        x = self.output(x)
+        #x = self.output(x)
         x = self.activationOut(x)
 
         y = self.input(real)
@@ -101,7 +104,8 @@ class discriminator(torch.nn.Module):
         y = self.conv2(y)
         y = self.activation3(y)
         y = self.flatten(y)
-        y = self.output(y)
+        #y = self.output(y)
+        y = self.activationOut(y)
         return x, y
 model_discriminator = discriminator()
 
@@ -110,8 +114,8 @@ model_discriminator = discriminator()
 discriminator_loss = torch.nn.BCELoss()
 generator_loss = torch.nn.BCELoss()
 #4. Create the optimizers
-discriminator_optimizer = torch.nn.optim.Adam(model_discriminator.parameters(), lr=0.0002, betas=(0.5, 0.999))
-generator_optimizer = torch.nn.optim.Adam(model_generator.parameters(), lr=0.0002, betas=(0.5, 0.999))
+discriminator_optimizer = torch.optim.Adam(model_discriminator.parameters(), lr=0.0002, betas=(0.5, 0.999))
+generator_optimizer = torch.optim.Adam(model_generator.parameters(), lr=0.0002, betas=(0.5, 0.999))
 #5. Create the training loop
 def train(disc_in, model_disciminator, model_generator, generator_loss, discriminator_loss, discriminator_optimizer, generator_optimizer):
     for epoch in range(EPOCHS):
@@ -119,7 +123,7 @@ def train(disc_in, model_disciminator, model_generator, generator_loss, discrimi
         #We need to 
         #Forward pass
         step = 0
-        for index, batch in disc_in:
+        for index, batch in enumerate(disc_in):
             #Train the discriminator, possibly multiple times per a given batch.
             for num_iterate in range(k):
                 print("We are on step: ", num_iterate, " which should reflect difference in " , index)
@@ -159,8 +163,6 @@ def test(model_generator):
     for index in range(NUMBER_TO_GENERATE):
         plt.imshow(fakes[index])
         plt.show()
-
-
         #Possibly if we need annotation support or something we can add more later:
 
 #7. Create the main function
