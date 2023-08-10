@@ -8,8 +8,8 @@ import cv2
 
 
 #These are the target final size of all of the input images
-IMG_HEIGHT = 256
-IMG_WIDTH = 256 
+IMG_HEIGHT = 32 #We need to reduce size, this is too big.
+IMG_WIDTH = 32 
 
 #These are how large to resize the image to before cropping a IMG_WIDTH square from the image (to "jitter" the image)
 JITTER_WIDTH = 286
@@ -83,18 +83,22 @@ def create_dataset(img_folder):
     #class_name = []
    
     for class_dir in os.listdir(img_folder):
+        unique = 0
         uniqueIdentifier = 0
         if(class_dir[-1] == 'S'): #'S' FOR SKIP
            continue
-        if(class_dir == '.DS_Store'): #Skip automatically created mac files
+        if(class_dir == '.DS_Store' or class_dir ==".gitignore"): #Skip automatically created mac files
            continue
         for file in os.listdir(os.path.join(img_folder, class_dir)):
+            unique += 1
+            first_period = file.find('.')
+            if file[first_period + 1:].find('.') != -1: #Rename bad files
+                second_period = file.find('.', first_period + 1)
+                print("REMOVING BAD FILE: " + file)
+                os.rename(os.path.join(img_folder, class_dir, file), os.path.join(img_folder, class_dir, "rename" + str(unique) + file[:second_period]))
+                file = file[:-2]
             image_path = os.path.join(img_folder, class_dir, file)
-            if image_path[-2] == '.': #Rename bad files
-                print("REMOVED BAD FILE: " + image_path)
-                os.rename(image_path, image_path[:-2])
-                image_path = image_path[:-2]
-            elif image_path[-1] != 'g': #If it's not a png/jpeg/jpg file, then we skip it
+            if image_path[-1] != 'g': #If it's not a png/jpeg/jpg file, then we skip it
                 continue
             #image = np.array(Image.open(image_path))
             #image = cv2.resize(image, (IMG_HEIGHT, IMG_WIDTH, 3))
@@ -129,4 +133,6 @@ def create_dataset(img_folder):
             #img_data_array.append(image)
             #class_name.append(dir1)
             #return img_data_array#, class_name
+            unique +=1      
+            
 create_dataset(all_image_folder)

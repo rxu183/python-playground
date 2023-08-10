@@ -6,21 +6,30 @@ from bs4 import BeautifulSoup
 s = requests.Session()
 headers = {'Accept': 'text/html'}
 #Curate based on Links: 
-ACTUAL_TARGET_URLS = ["https://pixabay.com/images/search/castle"]
+ACTUAL_TARGET_URLS = ["https://www.ebay.com/sch/i.html?_from=R40&_nkw=shoes&_sacat=0&_pgn=1"]
 NUMBER_PAGES = 10
 
 for i in range(NUMBER_PAGES):
-    ACTUAL_TARGET_URLS.append("https://pixabay.com/images/search/castle/?pagi=" + str(i))
+    ACTUAL_TARGET_URLS.append(ACTUAL_TARGET_URLS[0][:-1] + str(i)) #Append the page number to the end of the url
 
 CLASS_NAME = "link--WHWzm"
 IMG_CLASS_NAME = "fileThumb"
+
 def get_soup(url):
     return BeautifulSoup(url, 'html.parser')
+
+def trawl_ebay(url):
+    current = s.get(url, headers=headers)
+    current_webpage = get_soup(current.text)
+    print(current_webpage.prettify())
+    imgs_on_current = current_webpage.find_all('img', loading="eager")
+    for img in imgs_on_current:
+        os.system('wget -P raw_images/ %s' % img['src'])
 
 def trawl_pixabay(url):
     current = s.get(url, headers=headers)
     current_webpage = get_soup(current.text)
-    print(current_webpage.prettify())
+    #print(current_webpage.prettify())
     imgs_on_current = current_webpage.find_all('img', srcset=True)
     for img in imgs_on_current:
         os.system('wget -P raw_images/ %s' % img['src'])
@@ -54,4 +63,5 @@ def trawl_post(url):
 #    trawl_site(url)
 
 for url in ACTUAL_TARGET_URLS:
-    trawl_pixabay(url)
+   #trawl_pixabay(url)
+   trawl_ebay(url)
