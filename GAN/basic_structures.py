@@ -1,4 +1,5 @@
 import numpy as np
+import math
 import matplotlib.pyplot as plt
 
 def relu(x):
@@ -27,17 +28,43 @@ def integral(function, x, steps): #Again, we can approximate this with tiny rect
         result = np.append(result, element + result[i])
     return result[1:]
 
+def exponential(b, m, x):
+    return (math.exp(b))*pow(x, m)
+
 def jacobian(function, x, steps):
+    #What is a jacobian: 
     pass
 
+def numpyPlayground(x):
+    np.transpose(x) #This tranposes a numpy array along a given axis.
+    np.concatenate(x) #This should concatenate two numpy arrays by a given axis
+    np.full_like(x) #This creates a copy of a numpy array with the same size.
+    #df = pd.read_csv("FILE_NMAE") #This reads in a pandas dataframe.
+    #df["Column Name"] is how you access columns when looking for things like that. 
+    
 def function(x):
     return 2*x
 
 def plot():
-    space = np.linspace(-10, 10, 100)
-    figure = plt.figure("Something of Some Function")
-    #figure.suptitle('Relu Function')
-    plt.plot(space, derivative(relu, space, 100))
+    #x = [1, 2, 3]
+    #y = [5, 6, 7]
+    #temp = list(zip(x,y))
+    #print(list(zip(*temp)))
+    space = np.linspace(0, 125, 200)
+    figure = plt.figure("Graph Output")
+    figure.suptitle('Relu Function')
+    plt.plot(space, derivative(relu, space, 500))
+    #plt.plot(space, relu(space))
+    #m = 0.500048861195614
+    #b = -2.5767014308705485
+    #plt.plot(space, exponential(b,m, space))
+    #y = [0.833,0.589]
+    #x = [120,60]
+    #plt.plot(x, y, 'o', color='black')
+    #plt.title("I-V Curve")
+    #plt.xlabel("Voltage(Volts)")
+    #plt.ylabel("Current(Amps)")
+
     #figure.add_subplot(111)
     plt.show()
 plot()
