@@ -68,9 +68,9 @@ def leastSquares(x, y):
     points = random.sample(combined, min(50, len(x)))
     res1, res2 = zip(*points) #How does this work !"!??:!?/! I honestly have no clue.
     space = np.linspace(0, 25, 100)
-    fig = plt.figure("Linear Regression")
-    plt.xlabel("ln(I)")
-    plt.ylabel("ln(V)")
+    fig = plt.figure("Salinity-Temperature")
+    plt.xlabel("Temperature (C)")
+    plt.ylabel("Salinity (g/kg)")
     plt.plot(space, linear(theta[0], theta[1], space))
     plt.plot(res1, res2, 'o', color='black')
 
@@ -90,7 +90,7 @@ def model():
     
 #3. Run your model:
 def main():
-    is_manual = True
+    is_manual = False
     data_loc = "salinity.csv"
     xs, ys = read(is_manual, data_loc)
     coeffs = leastSquares(xs, ys)

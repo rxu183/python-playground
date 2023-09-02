@@ -20,6 +20,7 @@ ITERATE_GENERATOR = range(1) #Number of times to train the generator before trai
 
 writer = SummaryWriter() #Defines tensorboard writer.
 
+def count_parameters(model): return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def transform_image(image):
     #This transforms the image to a tensor
@@ -184,6 +185,7 @@ generator_optimizer = torch.optim.Adam(model_generator.parameters(), lr=0.0001, 
 #5. Create the training loop
 def train(disc_in, model_disciminator, model_generator, discriminator_loss, generator_loss, discriminator_optimizer, generator_optimizer, step=0):
     #print(EPOCHS)
+    print("Number of Parameters in generator: " ,count_parameters(model_generator), " Number of parameters in discriminator: ", count_parameters(model_disciminator))
     for epoch in range(EPOCHS):
         for index, batch in enumerate(disc_in):
             #batch = batch[0] #We need this when droping the class that CIFAR comes with:
